@@ -6,24 +6,31 @@ module.exports = (grunt)->
 
    PROFILE = grunt.option('profile') || 'dev'
 
-   SRC_DIR =                    'src'
+   #### Client (eg AngularJS) directories
+
+   SRC_DIR =                    'src/client'
    SRC_TEST_DIR =               "#{SRC_DIR}/test"
    SRC_PROFILES_DIR =           "#{SRC_DIR}/profiles"
    CURRENT_PROFILE_DIR =        "#{SRC_PROFILES_DIR}/#{PROFILE}"
 
    TARGET_DIR =                 'target'
    BUILD_DIR =                  "#{TARGET_DIR}/build"
-   BUILD_MAIN_DIR =             "#{BUILD_DIR}/main"
+   BUILD_MAIN_DIR =             "#{BUILD_DIR}/public"
 
-   STAGE_DIR =                  "#{TARGET_DIR}/stage"
+   STAGE_DIR =                  "#{TARGET_DIR}/clientStage"
    STAGE_APP_DIR =              "#{STAGE_DIR}/app"
    STAGE_TEST_DIR =             "#{STAGE_DIR}/test"
 
-   BUILD_TEST_DIR =             "#{BUILD_DIR}/test" 
+   BUILD_TEST_DIR =             "#{BUILD_DIR}/test/client" 
 
    # index.html is special, since it should be moved out of the index view and into the root
    SRC_INDEX_HTML =             "#{STAGE_APP_DIR}/index/index.html"
    DEST_INDEX_HTML =            "#{BUILD_MAIN_DIR}/index.html"
+
+   #### Server directories
+
+   SVR_SRC_DIR =                'src/server'
+   SVR_TARGET_DIR =             BUILD_DIR
 
    ###############################################################
    # Config
@@ -34,6 +41,8 @@ module.exports = (grunt)->
       clean:
          main:
             src: TARGET_DIR 
+         facebookTmp:
+            src: BUILD_MAIN_DIR 
 
       copy:
 
@@ -84,6 +93,11 @@ module.exports = (grunt)->
                   dest:          BUILD_TEST_DIR
                }
             ]
+         facebookTmp:
+            expand: true
+            cwd: "#{SRC_DIR}/facebookTmp"
+            src: "**/*.*"
+            dest: BUILD_MAIN_DIR
 
       concat:
          app_css:
@@ -97,12 +111,23 @@ module.exports = (grunt)->
             dest: "#{BUILD_MAIN_DIR}/js/lib.js"
 
       coffee:
-         app:
-            src: "#{STAGE_APP_DIR}/**/*.coffee"
-            dest: "#{BUILD_MAIN_DIR}/js/app.js"
-         test:
-            src: "#{SRC_TEST_DIR}/**/*.coffee"
-            dest: "#{BUILD_TEST_DIR}/js/lib.js"
+         client:
+            files: [
+               {
+                  src: "#{STAGE_APP_DIR}/**/*.coffee"
+                  dest: "#{BUILD_MAIN_DIR}/js/app.js"
+               }
+               {
+                  src: "#{SRC_TEST_DIR}/**/*.coffee"
+                  dest: "#{BUILD_TEST_DIR}/js/lib.js"
+               }
+            ]
+         server:
+            expand: true
+            cwd: SVR_SRC_DIR
+            src: "**/*.coffee"
+            dest: "#{SVR_TARGET_DIR}/"
+            ext: '.js'
 
       uglify:
          lib_js:
@@ -120,22 +145,15 @@ module.exports = (grunt)->
             src: "#{BUILD_MAIN_DIR}/style/app.css"
             dest: "#{BUILD_MAIN_DIR}/style/app.css"
 
-      connect:
-         server:
-            options:
-               base: BUILD_MAIN_DIR
-
       regarde:
          build:
             options:
                base: BUILD_MAIN_DIR
-            files: ["#{SRC_DIR}/**/*.{css,coffee,js,html}"]
-            tasks: ['build']
-         # Note, disabling this until https://github.com/mklabs/tiny-lr/issues/8 is resolved
-         # livereload:
-         #   files: ["#{BUILD_DIR}/**/*.{css,js,html}"]
-         #   tasks: ['livereload']
-
+            files: [
+               "#{SRC_DIR}/**/*.{css,coffee,js,html}"
+               "#{SVR_SRC_DIR}/**/*.coffee"
+            ]
+            tasks: ['build', 'facebookTmp']
 
    ##############################################################
    # Dependencies
@@ -155,10 +173,9 @@ module.exports = (grunt)->
    ###############################################################
 
    grunt.registerTask('build', ['copy','concat','coffee'])
-   grunt.registerTask('watcher', ['livereload-start', 'connect', 'regarde']) 
+   grunt.registerTask('watcher', ['livereload-start', 'regarde']) 
    grunt.registerTask('dist', ['build','uglify','cssmin'])
 
-   grunt.registerTask('default', ['clean','build','watcher'])
+   grunt.registerTask('facebookTmp', ['clean:facebookTmp', 'copy:facebookTmp'])
 
-
-
+   grunt.registerTask('default', ['clean','build','facebookTmp', 'watcher'])

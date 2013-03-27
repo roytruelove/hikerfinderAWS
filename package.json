@@ -1,18 +1,22 @@
 {
-    "name": "angular-grunt-coffeescript",
+    "name": "hikerfinderAWS",
     "author": "Roy Truelove <roytruelove@gmail.com>",
-    "description": "Seed project for large angularJs / grunt / coffeescrpt projects",
+    "description": "Hikerfinder Facebook App",
     "bugs" : {
-        "url": "https://github.com/roytruelove/angular-grunt-coffeescript/issues"
+        "url": "https://github.com/roytruelove/hikerfinderAWS/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/roytruelove/angular-grunt-coffeescript.git"
+        "url": "https://github.com/roytruelove/hikerfinderAWS.git"
     },
     "engines": {
         "node": ">= 0.8.4"
     },
     "dependencies": {
+        "async":"0.2.6",
+        "ejs":"0.8.3",
+        "faceplate":"0.5.0",
+        "express":"3.0.1"
     },
     "devDependencies": {
         "grunt": "0.4.1",
@@ -27,5 +31,5 @@
         "grunt-contrib-livereload":"0.1.2",
         "grunt-contrib-uglify":"0.2.0"
     },
-    "version": "0.2.0"
+    "version": "0.0.1"
 }
