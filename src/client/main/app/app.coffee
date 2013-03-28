@@ -10,6 +10,7 @@ mods = [
 	'common.services.dataSvc'
 	'common.services.envProvider'
 	'common.services.toastrWrapperSvc'
+	'common.services.facebook'
 
 	'detailsView.detailsViewCtrl'
 	'detailsView.personDetailsDirective'

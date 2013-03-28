@@ -82,6 +82,14 @@ module.exports = (grunt)->
                }
             ]
 
+         fbchannel:
+            files: [
+               {
+                  src:           "#{STAGE_APP_DIR}/index/channel.html"
+                  dest:          "#{BUILD_MAIN_DIR}/channel.html"
+               }
+            ]
+
          test:
             files: [
                {

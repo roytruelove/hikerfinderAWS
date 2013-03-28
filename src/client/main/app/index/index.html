@@ -7,8 +7,6 @@
 	<!-- Get as much from CDNs as we can -->
 
 	<!-- CSS -->
-	<link href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" rel="stylesheet">
-	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
 	<link href="style/lib.css" rel="stylesheet">
 	<link href="style/app.css" rel="stylesheet">
 
@@ -16,29 +14,66 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.js"></script>
 	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.js"></script>
+	<script src="//connect.facebook.net/en_US/all.js"></script>
 	<script src="js/lib.js"></script>
 	<script src="js/app.js"></script>
 	
 </head>
 
-<body ng-controller="index.indexCtrl">
-	<div id="topNav" class="container">
+<body class="contianer canvas" ng-controller="index.indexCtrl">
+	<div id="fb-root"></div>
+	<div style="height:20px"></div> <!-- spacer -->
+	<div ng-show="unauthorized" class="alert-message error">You cannot continue because you did not authorize the Hikerfinder app.  Refresh this page to retry.</div>
+	<div id="spash" ng-hide="loggedIn">
 		<div class="row">
 			<div class="span12">
-				<div class="navbar">
-					<div class="navbar-inner">
-						<a class="brand" href="https://github.com/roytruelove/angular-grunt-coffeescript">Angular-Grunt-Coffeescript</a>
-						<p class="navbar-text">A CoffeeScript + AngularJS + Grunt + Bootstrap Seed App</p>
-					</div>
-				</div>
+				<img width='720px' src='index/Boot-Print-Huge.png'>
 			</div>
 		</div>
-		<div ng-view></div> 
+	</div>
+	<div id="main" ng-show="loggedIn">
+		<h1>Hikerfinder</h1>
+		<p>Welcome dirty hiker!  The Hikerfinder facebook app allows you to find other hikers by trail name.</p>
+		<div style="height: 700px; overflow: auto;">
+		<table>
+			<thead>
+				<tr>
+					<th>Photo</th>
+					<th>Full Name</th>
+					<th>Trail</th>
+					<th>Year</th>
+					<th>Trail Name</th>
+					<th>Added</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="hiker in hikers">
+					<td><img ng-src="https://graph.facebook.com/{{hiker.id}}/picture"></td>
+					<td>{{hiker.name}}</td>
+					<td>Appalachian Trail</td>
+					<td>2006</td>
+					<td>Blue Fox</td>
+					<td>March 28, 2013</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		<div style="display: none;">
+		{{friends}}
+		<!--<div ng-view></div> -->
+		<div class="span12">
+			<h3>Graph Dumper</h3>
+		</div>
+		<div class="span12">
+			<input id="graphDumper" type="text" placeholder="Dump graph.."></input>
+			<button class="btn" ng-click="graphDumper()">Run</button>
+		</div>
 		<div class="row">
 			<div class="span12">
 				<hr>
 				<p class="text-center"><small>Running in {{env}} environment</small></p>
 			</div>
+		</div>
 		</div>
 	</div>
 </body>

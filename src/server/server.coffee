@@ -5,14 +5,14 @@ adminPort = 8111
 
 createAppServer = ()->
 	app = express();
+	
+	app.use(express.bodyParser())
 
-	app.configure ()->
-		app.use(express.static(__dirname + '/public'))
-		app.use(express.bodyParser())
+	app.post '/', (req, resp, next)->
+		req.method="GET"
+		next()
 
-	app.post '/', (req, resp)->
-		console.log req.body
-		resp.send("Hello World")
+	app.use(express.static(__dirname + '/public'))
 
 	app.listen port, ()->
 		console.log "Started Server on #{port}"
