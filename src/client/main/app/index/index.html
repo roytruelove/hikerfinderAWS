@@ -13,7 +13,7 @@
 	<!-- JS -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.js"></script>
-	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.js"></script>
+	<!--<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.js"></script>-->
 	<script src="//connect.facebook.net/en_US/all.js"></script>
 	<script src="js/lib.js"></script>
 	<script src="js/app.js"></script>
@@ -32,8 +32,15 @@
 		</div>
 	</div>
 	<div id="main" ng-show="loggedIn">
+
 		<h1>Hikerfinder</h1>
 		<p>Welcome dirty hiker!  The Hikerfinder facebook app allows you to find other hikers by trail name.</p>
+
+		<ul class="tabs" id="myTabs">
+			<li class="active"><a href="#a">Hikers</a></li>
+			<li><a href="#b">Manage My Hikes</a></li>
+		</ul>
+
 		<div style="height: 700px; overflow: auto;">
 		<table>
 			<thead>
