@@ -41,9 +41,7 @@ module.exports = (grunt)->
       clean:
          main:
             src: TARGET_DIR 
-         facebookTmp:
-            src: BUILD_MAIN_DIR 
-
+            
       copy:
 
          # Copy all non-profile to the stage dir.  Stage dir allows us to override
@@ -93,11 +91,6 @@ module.exports = (grunt)->
                   dest:          BUILD_TEST_DIR
                }
             ]
-         facebookTmp:
-            expand: true
-            cwd: "#{SRC_DIR}/facebookTmp"
-            src: "**/*.*"
-            dest: BUILD_MAIN_DIR
 
       concat:
          app_css:
@@ -122,6 +115,7 @@ module.exports = (grunt)->
                   dest: "#{BUILD_TEST_DIR}/js/lib.js"
                }
             ]
+
          server:
             expand: true
             cwd: SVR_SRC_DIR
@@ -153,7 +147,7 @@ module.exports = (grunt)->
                "#{SRC_DIR}/**/*.{css,coffee,js,html}"
                "#{SVR_SRC_DIR}/**/*.coffee"
             ]
-            tasks: ['build', 'facebookTmp']
+            tasks: ['build'] 
 
    ##############################################################
    # Dependencies
@@ -176,6 +170,4 @@ module.exports = (grunt)->
    grunt.registerTask('watcher', ['livereload-start', 'regarde']) 
    grunt.registerTask('dist', ['build','uglify','cssmin'])
 
-   grunt.registerTask('facebookTmp', ['clean:facebookTmp', 'copy:facebookTmp'])
-
-   grunt.registerTask('default', ['clean','build','facebookTmp', 'watcher'])
+   grunt.registerTask('default', ['clean','build','watcher'])
