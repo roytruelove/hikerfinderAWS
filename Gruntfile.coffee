@@ -41,7 +41,7 @@ module.exports = (grunt)->
       clean:
          main:
             src: TARGET_DIR 
-            
+
       copy:
 
          # Copy all non-profile to the stage dir.  Stage dir allows us to override
@@ -139,15 +139,33 @@ module.exports = (grunt)->
             src: "#{BUILD_MAIN_DIR}/style/app.css"
             dest: "#{BUILD_MAIN_DIR}/style/app.css"
 
+      bgShell:
+         startServer:
+            cmd: "node #{SVR_TARGET_DIR}/server.js"
+            bg: true
+            stdout: true
+
+         stopServer:
+            cmd: "wget --tries=1 http://localhost:8111"
+            bg: false
+            stdout: true
+
       regarde:
-         build:
+         client:
             options:
                base: BUILD_MAIN_DIR
             files: [
                "#{SRC_DIR}/**/*.{css,coffee,js,html}"
+            ]
+            tasks: ['clientRefresh'] 
+         server:
+            options:
+               base: BUILD_MAIN_DIR
+            files: [
                "#{SVR_SRC_DIR}/**/*.coffee"
             ]
-            tasks: ['build'] 
+            tasks: ['serverRefresh'] 
+
 
    ##############################################################
    # Dependencies
@@ -161,13 +179,17 @@ module.exports = (grunt)->
    grunt.loadNpmTasks('grunt-contrib-connect')
    grunt.loadNpmTasks('grunt-contrib-livereload')
    grunt.loadNpmTasks('grunt-regarde')
+   grunt.loadNpmTasks('grunt-bg-shell')
 
    ###############################################################
    # Alias tasks
    ###############################################################
 
    grunt.registerTask('build', ['copy','concat','coffee'])
-   grunt.registerTask('watcher', ['livereload-start', 'regarde']) 
+   grunt.registerTask('watcher', ['regarde']) 
    grunt.registerTask('dist', ['build','uglify','cssmin'])
 
-   grunt.registerTask('default', ['clean','build','watcher'])
+   grunt.registerTask('serverRefresh', ['bgShell:stopServer', 'build', 'bgShell:startServer'])
+   grunt.registerTask('clientRefresh', ['build'])
+
+   grunt.registerTask('default', ['clean','build', 'bgShell:stopServer', 'bgShell:startServer', 'watcher'])
