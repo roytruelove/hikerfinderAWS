@@ -82,6 +82,7 @@ module.exports = (grunt)->
                }
             ]
 
+         # Facebook apps need this channel file in the root
          fbchannel:
             files: [
                {
@@ -193,11 +194,14 @@ module.exports = (grunt)->
    # Alias tasks
    ###############################################################
 
+   #grunt.registerTask('copyBuild', ['copy:stage', 'copy:profiles', 'copy:static', 'copy:'])
+
    grunt.registerTask('build', ['copy','concat','coffee'])
-   grunt.registerTask('watcher', ['regarde']) 
    grunt.registerTask('dist', ['build','uglify','cssmin'])
 
    grunt.registerTask('serverRefresh', ['bgShell:stopServer', 'build', 'bgShell:startServer'])
    grunt.registerTask('clientRefresh', ['build'])
 
-   grunt.registerTask('default', ['clean','build', 'bgShell:stopServer', 'bgShell:startServer', 'watcher'])
+   grunt.registerTask('deploy', 'dist', 'copy:deploy')
+
+   grunt.registerTask('default', ['clean','serverRefresh', 'regarde'])
