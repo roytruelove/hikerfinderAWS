@@ -43,38 +43,10 @@
 
 		<div class="tab-content">
 			<div id="hikerList" class="active">
-				<div style="height: 600px; overflow: auto;">
-					<table>
-						<thead>
-							<tr>
-								<th>Photo</th>
-								<th>Full Name</th>
-								<th>Trail</th>
-								<th>Year</th>
-								<th>Trail Name</th>
-								<th>Added</th>
-								<th>Friend?</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="hiker in hikers">
-								<td><img ng-src="https://graph.facebook.com/{{hiker.id}}/picture"></td>
-								<td>{{hiker.name}}</td>
-								<td>Appalachian Trail</td>
-								<td>2006</td>
-								<td>Blue Fox</td>
-								<td>March 28, 2013</td>
-								<td ng-init="hiker.friend = isFriend()">
-									<img style="width: 20px" ng-show="hiker.friend" src="index/checkmark.png">
-									<img style="width: 20px" ng-hide="hiker.friend" src="index/checkmark-red.png">
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+				<div ng-include src="'hikerListView/hikerListView.html'"></div>
 			</div>
-			<div id="hikeMgmt">
-				MGMT
+			<div id="hikeMgmt" style="display: none;">
+				<div ng-include src="'hikeMgmtView/hikeMgmtView.html'"></div>
 			</div>
 		</div>
 		<div style="display: none;">

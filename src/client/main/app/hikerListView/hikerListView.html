@@ -1,13 +1,30 @@
-<div class="row" ng-controller='searchView.searchViewCtrl'>
-	<div class="span12">
-		<h3>User Search</h3>
-	</div>
-	<div class="span6">
-		<input type="text" ng-model="search" placeholder="Filter by name..."></input>
-		<ul>
-			<li glow-green-on-mouseover ng-click="loadDetails(person.id)" ng-repeat="person in people | filter:search">
-				{{person.firstName | mattizer }} {{person.lastName}}
-			</li>
-		</ul>
-	</div>
+<div style="height: 600px; overflow: auto;" ng-controller='hikerListView.hikerListViewCtrl'>
+	<table>
+		<thead>
+			<tr>
+				<th>Photo</th>
+				<th>Full Name</th>
+				<th>Trail</th>
+				<th>Year</th>
+				<th>Trail Name</th>
+				<th>Added</th>
+				<th>Friend?</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="hiker in hikers">
+				<td><img ng-src="https://graph.facebook.com/{{hiker.id}}/picture"></td>
+				<td>{{hiker.name}}</td>
+				<td>Appalachian Trail</td>
+				<td>2006</td>
+				<td>Blue Fox</td>
+				<td>March 28, 2013</td>
+				<td ng-init="hiker.friend = isFriend()">
+					<img style="width: 20px" ng-show="hiker.friend" src="index/checkmark.png">
+					<img style="width: 20px" ng-hide="hiker.friend" src="index/checkmark-red.png">
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 </div>

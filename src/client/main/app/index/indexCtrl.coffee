@@ -9,10 +9,8 @@ angular.module(name, []).controller(name, [
 	'common.services.facebook'
 	($log, $scope, $q, $rootScope, envSvc, fb) ->
 
+		#shows big boot
 		$rootScope.loggedIn = false
-
-		$scope.isFriend = ()->
-			if Math.random() > .5 then true else false
 
 		fbLoginFailure = ()->
 			# shows failure message
@@ -20,13 +18,11 @@ angular.module(name, []).controller(name, [
 
 		fbLoginSuccess = (authResp)->
 
+			# hide big boot
 			$rootScope.loggedIn = true
+			# hides failure message
 			$scope.unauthorized = false
-
-			fb.run('me/friends').then (resp)->
-				$scope.hikers = resp.data[0..100]
 
 		fb.init().then(fbLoginSuccess, fbLoginFailure)
 
-		$('#mainTabs').tabs()
 	])

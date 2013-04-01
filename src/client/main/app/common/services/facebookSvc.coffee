@@ -8,13 +8,16 @@ class FacebookSvc
 
 	constructor: (@$log, @$q, @$rootScope) ->
 
+		@initDefer = @$q.defer()
+
+		# used to ensure that all facebook calls are done after initialization	
+		@initialized = @initDefer.promise
+
 	api: () ->
 		FB
 
 	# see https://developers.facebook.com/docs/howtos/login/getting-started/#step2
 	init: ()->
-
-		fbDef = @$q.defer()
 
 		login = ()=>
 			FB.login (resp)=>
@@ -22,10 +25,10 @@ class FacebookSvc
 				@$rootScope.$apply ()=>
 
 					if resp.status == "not_authorized"
-						fbDef.reject()
+						@initDefer.reject()
 
 					else
-						fbDef.resolve(resp.authResponse)
+						@initDefer.resolve(resp.authResponse)
 
 		window.fbAsyncInit = ()=>
 
@@ -38,8 +41,8 @@ class FacebookSvc
 
 			FB.getLoginStatus (resp)=>
 				if resp.status == 'connected'
-					@$rootScope.$apply ()->
-						fbDef.resolve(resp.authResponse)
+					@$rootScope.$apply ()=>
+						@initDefer.resolve(resp.authResponse)
 				else if resp.status == 'not_authorized'
 					login()
 				else
@@ -60,17 +63,19 @@ class FacebookSvc
 
 		loadFbAsync(document)
 
-		return fbDef.promise
+		return @initialized
 
 	run: (url)->
 
-		d = @$q.defer()
+		@initialized.then ()=>
 
-		@api().api "/#{url}", (resp)=>
-			@$rootScope.$apply ()=>
-				d.resolve(resp)
+			d = @$q.defer()
 
-		return d.promise
+			@api().api "/#{url}", (resp)=>
+				@$rootScope.$apply ()=>
+					d.resolve(resp)
+
+			return d.promise
 
 angular.module(name, []).factory(name, [
 	'$log',
