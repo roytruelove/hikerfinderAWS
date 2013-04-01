@@ -3,22 +3,17 @@
 ### ###########################################################################
 
 mods = [
+	
+	'common.directives.tabs'
 
-	'common.directives.glowGreenOnMouseoverDirective'
-	'common.directives.uiTooltipDirective'
-	'common.filters.toLowerFilter'
 	'common.services.dataSvc'
 	'common.services.envProvider'
 	'common.services.toastrWrapperSvc'
 	'common.services.facebook'
 
-	'detailsView.detailsViewCtrl'
-	'detailsView.personDetailsDirective'
-
 	'index.indexCtrl'
 
-	'searchView.mattizerFilter'
-	'searchView.searchViewCtrl'
+	'hikerListView.hikerListViewCtrl'
 ]
 
 ### ###########################################################################

@@ -27,4 +27,6 @@ angular.module(name, []).controller(name, [
 				$scope.hikers = resp.data[0..100]
 
 		fb.init().then(fbLoginSuccess, fbLoginFailure)
+
+		$('#mainTabs').tabs()
 	])

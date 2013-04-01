@@ -36,39 +36,46 @@
 		<h1>Hikerfinder</h1>
 		<p>Welcome dirty hiker!  The Hikerfinder facebook app allows you to find other hikers by trail name.</p>
 
-		<ul class="tabs" id="myTabs">
-			<li class="active"><a href="#a">Hikers</a></li>
-			<li><a href="#b">Manage My Hikes</a></li>
+		<ul class="tabs" id="mainTabs">
+			<li class="active"><a href="javascript:void(0)" tab="hikerList">Hikers</a></li>
+			<li><a href="javascript:void(0)" tab="hikeMgmt">Manage My Hikes</a></li>
 		</ul>
 
-		<div style="height: 700px; overflow: auto;">
-		<table>
-			<thead>
-				<tr>
-					<th>Photo</th>
-					<th>Full Name</th>
-					<th>Trail</th>
-					<th>Year</th>
-					<th>Trail Name</th>
-					<th>Added</th>
-					<th>Friend?</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="hiker in hikers">
-					<td><img ng-src="https://graph.facebook.com/{{hiker.id}}/picture"></td>
-					<td>{{hiker.name}}</td>
-					<td>Appalachian Trail</td>
-					<td>2006</td>
-					<td>Blue Fox</td>
-					<td>March 28, 2013</td>
-					<td ng-init="hiker.friend = isFriend()">
-						<img style="width: 20px" ng-show="hiker.friend" src="index/checkmark.png">
-						<img style="width: 20px" ng-hide="hiker.friend" src="index/checkmark-red.png">
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="tab-content">
+			<div id="hikerList" class="active">
+				<div style="height: 600px; overflow: auto;">
+					<table>
+						<thead>
+							<tr>
+								<th>Photo</th>
+								<th>Full Name</th>
+								<th>Trail</th>
+								<th>Year</th>
+								<th>Trail Name</th>
+								<th>Added</th>
+								<th>Friend?</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="hiker in hikers">
+								<td><img ng-src="https://graph.facebook.com/{{hiker.id}}/picture"></td>
+								<td>{{hiker.name}}</td>
+								<td>Appalachian Trail</td>
+								<td>2006</td>
+								<td>Blue Fox</td>
+								<td>March 28, 2013</td>
+								<td ng-init="hiker.friend = isFriend()">
+									<img style="width: 20px" ng-show="hiker.friend" src="index/checkmark.png">
+									<img style="width: 20px" ng-hide="hiker.friend" src="index/checkmark-red.png">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div id="hikeMgmt">
+				MGMT
+			</div>
 		</div>
 		<div style="display: none;">
 		{{friends}}

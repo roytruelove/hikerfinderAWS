@@ -1,4 +1,4 @@
-name = 'searchView.searchViewCtrl'
+name = 'hikerListView.hikerListViewCtrl'
 
 angular.module(name, []).controller(name, [
 	'$scope'
@@ -7,4 +7,5 @@ angular.module(name, []).controller(name, [
 	'common.services.dataSvc'
 	'common.services.toastrWrapperSvc'
 	($scope, $log, $location, data, tstr) ->
+		
 	])
