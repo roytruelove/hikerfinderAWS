@@ -51,6 +51,7 @@
 					<th>Year</th>
 					<th>Trail Name</th>
 					<th>Added</th>
+					<th>Friend?</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -61,6 +62,10 @@
 					<td>2006</td>
 					<td>Blue Fox</td>
 					<td>March 28, 2013</td>
+					<td ng-init="hiker.friend = isFriend()">
+						<img style="width: 20px" ng-show="hiker.friend" src="index/checkmark.png">
+						<img style="width: 20px" ng-hide="hiker.friend" src="index/checkmark-red.png">
+					</td>
 				</tr>
 			</tbody>
 		</table>

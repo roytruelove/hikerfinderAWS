@@ -43,11 +43,10 @@ module.exports = (grunt)->
             src: TARGET_DIR 
 
       copy:
-
-         # Copy all non-profile to the stage dir.  Stage dir allows us to override
-         # non-profile-specific code w/ the profile defined on the cmd line (or 'dev' by default)
          stage:
             files: [
+               # Copy all non-profile to the stage dir.  Stage dir allows us to override
+               # non-profile-specific code w/ the profile defined on the cmd line (or 'dev' by default)
                {
                   expand:        true
                   cwd:           "#{SRC_DIR}/main"
@@ -55,42 +54,42 @@ module.exports = (grunt)->
                   dest:          STAGE_DIR
                }
             ]
-
-         # override staging dir w/ profile-specific files
          profiles:
             files: [
+               # override staging dir w/ profile-specific files
                {
                   expand:        true
                   cwd:           CURRENT_PROFILE_DIR  
                   src:           '**'
                   dest:          STAGE_DIR
                }
+               # copies all files from staging to the build dir that do not need any further processing
             ]
-
-         # copies all files from staging to the build dir that do not need any further processing
-         static:
+         index:
             files: [
                {
                   src:           SRC_INDEX_HTML
                   dest:          DEST_INDEX_HTML
                }
+            ]
+         static:
+            files: [
                {
                   expand:        true
                   cwd:           STAGE_APP_DIR
                   src:           ['**/*.{html,jpg,png,gif}', "!{SRC_INDEX_HTML}"]
                   dest:          BUILD_MAIN_DIR
                }
+               # Facebook apps need this channel file in the root
             ]
-
-         # Facebook apps need this channel file in the root
-         fbchannel:
+         fbChannel:
             files: [
                {
                   src:           "#{STAGE_APP_DIR}/index/channel.html"
                   dest:          "#{BUILD_MAIN_DIR}/channel.html"
                }
+               # Test files
             ]
-
          test:
             files: [
                {
@@ -194,14 +193,21 @@ module.exports = (grunt)->
    # Alias tasks
    ###############################################################
 
-   #grunt.registerTask('copyBuild', ['copy:stage', 'copy:profiles', 'copy:static', 'copy:'])
+   grunt.registerTask('copyBuild', [
+      'copy:stage'
+      'copy:profiles'
+      'copy:index'
+      'copy:static'
+      'copy:fbChannel'
+      'copy:test'
+   ])
 
-   grunt.registerTask('build', ['copy','concat','coffee'])
+   grunt.registerTask('build', ['copyBuild','concat','coffee'])
    grunt.registerTask('dist', ['build','uglify','cssmin'])
 
    grunt.registerTask('serverRefresh', ['bgShell:stopServer', 'build', 'bgShell:startServer'])
    grunt.registerTask('clientRefresh', ['build'])
 
-   grunt.registerTask('deploy', 'dist', 'copy:deploy')
+   grunt.registerTask('deploy', ['dist', 'copy:deploy'])
 
    grunt.registerTask('default', ['clean','serverRefresh', 'regarde'])

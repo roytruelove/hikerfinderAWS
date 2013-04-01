@@ -11,6 +11,9 @@ angular.module(name, []).controller(name, [
 
 		$rootScope.loggedIn = false
 
+		$scope.isFriend = ()->
+			if Math.random() > .5 then true else false
+
 		fbLoginFailure = ()->
 			# shows failure message
 			$scope.unauthorized = true
