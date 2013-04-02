@@ -17,7 +17,8 @@
         "ejs":"0.8.3",
         "faceplate":"0.5.0",
         "express":"3.0.1",
-        "aws-sdk":"latest"
+        "aws-sdk":"latest",
+        "underscore":"1.4.4"
     },
     "devDependencies": {
         "grunt": "0.4.1",

@@ -1,5 +1,6 @@
 express = require('express')
 AWS = require('aws-sdk')
+_ = require('underscore')
 
 awsConfig = 
 	accessKeyId: process.env.AWS_ACCESS_KEY
@@ -17,51 +18,42 @@ ddb = new AWS.DynamoDB.Client()
 
 getAllHikeData = ()->
 	t=[]
-	###
 	t.push {TableName:'Hikes',Item:{FBID: {S: '1630778359'},TrailYear: {S: '1_1972'},TrailName: {S: 'TJ aka Teej'},Notes: {S: 'Gorham to Monson'}}}
-	###
 	return t
 
 createAppServer = ()->
 	app = express();
 
-	app.get '/dynamoDB/adder', (req, resp, next)->
-
-		resp.contentType 'application/json'
-		responses = []
-
-		data = getAllHikeData()
-
-		count = 0
-
-		for hike in data
-			count++
-			console.log "Adding:"
-			console.log hike
-			ddb.putItem hike, (ddbErr, ddbResp)->
-
-				if ddbErr?
-					resp.send(500, JSON.stringify(ddbErr))
-
-				unless ddbResp?
-					resp.send(500, "Both were null")
-
-				count--
-				console.log "Count = #{count}}"
-
+	# putItem example URL
+	# http://localhost:5000/dynamoDB/putItem?TableName=Hikes&ItemJSON={%22FBID%22:{%22S%22:%221630778359%22},%22TrailYear%22:{%22S%22:%221_1972%22},%22TrailName%22:{%22S%22:%22TJ%20aka%20Teej%22},%22Notes%22:{%22S%22:%22Gorham%20to%20Monson%22}}
 	app.get '/dynamoDB/:action', (req, resp, next)->
+
+		console.log JSON.stringify(getAllHikeData())
 
 		resp.contentType 'application/json'
 
 		action = req.params.action
+		params = {}
 
-		ddb[action] req.query, (ddbErr, ddbResp)->
+		_.each req.query, (param, index)->
+
+			#If the param ends in JSON, strip it off
+			if index.indexOf('JSON', index.length - 4) != -1
+				parsedVal = JSON.parse(param)
+				index = index.substr(0,index.length - 4)
+				params[index] = parsedVal
+			else
+				params[index] = param
+
+		ddb[action] params, (ddbErr, ddbResp)->
 
 			if ddbErr?
 				resp.send(500, JSON.stringify(ddbErr))
 
-			resp.send(JSON.stringify(ddbResp))
+			unless ddbResp?
+				resp.send(500, "Didn't get an error or a response!")
 
+			resp.send(JSON.stringify(ddbResp))
 
 	app.use(express.bodyParser())
 
