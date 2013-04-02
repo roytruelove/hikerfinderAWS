@@ -14,6 +14,7 @@ mods = [
 	'index.indexCtrl'
 
 	'hikerListView.hikerListViewCtrl'
+	'hikeMgmtView.hikeMgmtViewCtrl'
 ]
 
 ### ###########################################################################

@@ -15,18 +15,20 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.js"></script>
 	<!--<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.js"></script>-->
 	<script src="//connect.facebook.net/en_US/all.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.3.1/select2.min.js"></script>
 	<script src="js/lib.js"></script>
 	<script src="js/app.js"></script>
 	
 </head>
 
-<body class="contianer canvas" ng-controller="index.indexCtrl">
+<body class="container canvas" ng-controller="index.indexCtrl">
 	<div id="fb-root"></div>
 	<div style="height:20px"></div> <!-- spacer -->
 	<div ng-show="unauthorized" class="alert-message error">You cannot continue because you did not authorize the Hikerfinder app.  Refresh this page to retry.</div>
 	<div id="spash" ng-hide="loggedIn">
 		<div class="row">
 			<div class="span12">
+				<img src='index/ajax-loader.gif'>
 				<img width='720px' src='index/Boot-Print-Huge.png'>
 			</div>
 		</div>

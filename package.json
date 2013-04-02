@@ -16,7 +16,8 @@
         "async":"0.2.6",
         "ejs":"0.8.3",
         "faceplate":"0.5.0",
-        "express":"3.0.1"
+        "express":"3.0.1",
+        "aws-sdk":"latest"
     },
     "devDependencies": {
         "grunt": "0.4.1",

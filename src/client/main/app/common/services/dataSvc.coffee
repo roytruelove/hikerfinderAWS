@@ -6,17 +6,52 @@ name = 'common.services.dataSvc'
 
 class DataSvc
 
-	constructor: (@$log, @$http, @env) ->
+	constructor: (@$log, @$timeout, @env) ->
 
-	_get: (relPath)->
-		return @$http.get("#{@env.serverUrl}/#{relPath}")
+		@hardcoded = {}
 
-	getPeople: () ->
-		return @_get('people')
+		@hardcoded.trails = 
+			'1':
+				name: 'Appalachian Trail'
+			'2':
+				name: 'Continental Divide Trail'
+			'3':
+				name: 'Pacific Crest Trail'
 
-	getPerson: (id) ->
-		return @_get("person/#{id}")
+		@hardcoded.hikes =
+			'1_2006':
+				'672579111': 
+					trail: 1
+					trailName: 'Kilgore Trout'
+					year: 2006
+					notes: 'GA->VT'
+					fbid: '672579111'
+				'106232': 
+					trail: 1
+					trailName: 'Jules'
+					year: 2006
+					notes: 'GA->ME'
+					fbid: '106232'
+			'1_2007':
+				'672579111': 
+					trail: 1
+					trailName: 'Kilgore Trout'
+					year: 2007
+					notes: 'VT->ME'
+					fbid: '672579111'
 
-angular.module(name, []).factory(name, ['$log','$http', 'common.services.env', ($log, $http, env) ->
-	new DataSvc($log, $http, env)
+	getTrails: ()->
+		@$timeout ()=>
+			return @hardcoded.trails
+
+	getUserHikes: (fbId)->
+		@$timeout ()=>
+
+			userHikes = []
+			$.each hikes, (trailYear)->
+
+			return @hardcoded.hikes[fbId]
+
+angular.module(name, []).factory(name, ['$log','$timeout', 'common.services.env', ($log, $timeout, env) ->
+	new DataSvc($log, $timeout, env)
 ])

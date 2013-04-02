@@ -9,19 +9,25 @@ angular.module(name, []).controller(name, [
 	'common.services.facebook'
 	($log, $scope, $q, $rootScope, envSvc, fb) ->
 
-		#shows big boot
+		meDef = $q.defer()
+		$rootScope.me = meDef.promise #resolved when we get 'me' from facebook
+
+		# shows big boot
 		$rootScope.loggedIn = false
 
 		fbLoginFailure = ()->
-			# shows failure message
+			# shows unauthorized message
 			$scope.unauthorized = true
 
 		fbLoginSuccess = (authResp)->
 
 			# hide big boot
 			$rootScope.loggedIn = true
-			# hides failure message
+			# hides unauthorized message
 			$scope.unauthorized = false
+
+			fb.run('me').then (resp)->
+				meDef.resolve(resp)
 
 		fb.init().then(fbLoginSuccess, fbLoginFailure)
 

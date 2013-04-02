@@ -1,1 +1,73 @@
-hikeMgmtView
+<div ng-controller="hikeMgmtView.hikeMgmtViewCtrl">
+	<form style='display: none;'>
+		<fieldset>
+			<div class="clearfix">
+				<label for="trail">Trail</label>
+				<div class="input">
+					<select name="Trail" id="trail" style="width: 220px;">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+					</select>
+				</div>
+			</div><!-- /clearfix -->
+			<div class="clearfix">
+				<label for="xlInput">Trail Name</label>
+				<div class="input">
+					<input class="" id="trailName" name="trailName" size="30" type="text" placeholder="...if you have one">
+				</div>
+			</div><!-- /clearfix -->
+			<div class="clearfix">
+				<label for="multiSelect">Multiple select</label>
+				<div class="input">
+					<select class="large" style="width: 220px;" size="5" multiple="multiple" name="multiSelect" id="multiSelect">
+						<option>Trail Angel / Permanent Fixture</option>
+						<option>2013</option>
+						<option>2012</option>
+						<option>2011</option>
+						<option>2010</option>
+					</select>
+				</div>
+			</div><!-- /clearfix -->
+			<div class="clearfix">
+				<label for="textarea">Textarea</label>
+				<div class="input">
+					<textarea class="xxlarge" id="notes" name="notes" rows="4"></textarea>
+					<span class="help-block">
+						NOBO, SOBO, flip-flopper, section list, etc.
+					</span>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+	<div class="row">
+		<div class="span2 offset10">
+			<button class="btn primary">Add New Hike</button>
+		</div>
+	</div>
+	<div style="height: 600px; overflow: auto;">
+		<table>
+			<thead>
+				<tr>
+					<th>Trail</th>
+					<th>Trail Name</th>
+					<th>Year(s)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan='3'><em>(No hikes yet)</em></td>
+				</tr>
+				<!--
+				<tr>
+					<td><a href="javascript:void(0)">Appalachian Trail</a></td>
+					<td>Kilgore Trout</td>
+					<td>2006, 2007</td>
+				</tr>
+			-->
+			</tbody>
+		</table>
+	</div>
+</div>
