@@ -63,8 +63,8 @@ module.exports = (grunt)->
 						src:           '**'
 						dest:          STAGE_DIR
 					}
-					# copies all files from staging to the build dir that do not need any further processing
 				]
+			# copies all files from staging to the build dir that do not need any further processing
 			index:
 				files: [
 					{
@@ -80,16 +80,16 @@ module.exports = (grunt)->
 						src:           ['**/*.{html,jpg,png,gif}', "!{SRC_INDEX_HTML}"]
 						dest:          BUILD_MAIN_DIR
 					}
-					# Facebook apps need this channel file in the root
 				]
+			# Facebook apps need this channel file in the root
 			fbChannel:
 				files: [
 					{
 						src:           "#{STAGE_APP_DIR}/index/channel.html"
 						dest:          "#{BUILD_MAIN_DIR}/channel.html"
 					}
-					# Test files
 				]
+			# Test files
 			test:
 				files: [
 					{
@@ -97,6 +97,16 @@ module.exports = (grunt)->
 						cwd:           SRC_TEST_DIR
 						src:           ['{lib,config}/**']
 						dest:          BUILD_TEST_DIR
+					}
+				]
+			server:
+				# copy everything except coffeescript to the server dir
+				files: [
+					{
+						expand:        true
+						cwd:           SVR_SRC_DIR
+						src:           ['!**/*.coffeee']
+						dest:          SVR_TARGET_DIR
 					}
 				]
 
@@ -200,6 +210,7 @@ module.exports = (grunt)->
 		'copy:static'
 		'copy:fbChannel'
 		'copy:test'
+		'copy:server'
 	])
 
 	grunt.registerTask('build', ['copyBuild','concat','coffee'])
