@@ -15,16 +15,9 @@ angular.module(name, []).controller(name, [
 		trail = 1
 
 		backend.getHikes(trail, year).then (data)->
-			debugger
+			console.log data[0]
+			$scope.hikers = data
 
-		fb.run('me/friends').then (resp)->
-			$scope.hikers = resp.data[0..100]
-
-		$scope.isFriend = ()->
-			if Math.random() > .5 then true else false
-
-		###
-		backend.getTrails().then (trails)->
-			debugger
-		###
+		$scope.getTrail = (id)->
+			return backend.getTrail(id).name
 	])

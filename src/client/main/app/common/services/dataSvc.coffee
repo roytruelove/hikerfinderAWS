@@ -35,52 +35,27 @@ class DataSvc
 			'12':
 				name: 'Other (Not Listed)'
 
-		@hardcoded.hikes =
-			'1_2006':
-				'672579111': 
-					trail: 1
-					trailName: 'Kilgore Trout'
-					year: 2006
-					notes: 'GA->VT'
-					fbid: '672579111'
-				'106232': 
-					trail: 1
-					trailName: 'Jules'
-					year: 2006
-					notes: 'GA->ME'
-					fbid: '106232'
-			'1_2007':
-				'672579111': 
-					trail: 1
-					trailName: 'Kilgore Trout'
-					year: 2007
-					notes: 'VT->ME'
-					fbid: '672579111'
-
 	getTrails: ()->
 		@$timeout ()=>
 			return @hardcoded.trails
 
+	getTrail:(id)->
+		return @hardcoded.trails[id]
+
 	getHikes: (trailId, year, nameFilter)->
+		return @_getItems("/getHikes/#{trailId}/#{year}")
 
-		url = "/getHikes/#{trailId}/#{year}"
-
-		params = 
-			TableName: 'Hikes'
-			HashKeyValue:
-				S: "#{trailId}_#{year}"
-
-		return @_runDynamoQuery('query', params).then (resp)->
-			return Items
-
-	getUserHikes: (fbId)->
-		return null
-
-		url = "/dynamoDB/#{method}/#{JSON.stringify(params)}"
-		console.log (["Backend call to #{url}", params])
-
+	_get: (url)->
 		@$http.get(url).then (resp)=>
 			return resp.data
+		, (errorResp)=>
+			# TODO handle this elegantly
+			$log.log (['Could not handle request to server', errorResp])
+
+	# Helper function when a request returns a list of items.
+	_getItems: (url)->
+		@_get(url).then (data)->
+			return data.Items
 
 angular.module(name, []).factory(
 	name, [

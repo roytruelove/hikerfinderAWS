@@ -28,8 +28,8 @@ initCache = ()->
 		max: 500
 		dispose: (key, value)->
 			console.log "Cache disposing of #{key}"
-		#maxAge: 1000 * 60 * 60 * 1 # 1 hour
-		maxAge: 1 #effectively disables cache
+		maxAge: 1000 * 60 * 60 * 1 # 1 hour
+		#maxAge: 1 #effectively disables cache
 
 	cache = LRU(options)
 
