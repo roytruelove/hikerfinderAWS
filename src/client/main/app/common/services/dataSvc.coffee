@@ -6,7 +6,7 @@ name = 'common.services.dataSvc'
 
 class DataSvc
 
-	constructor: (@$log, @$timeout, @env) ->
+	constructor: (@$log, @$timeout, @$http) ->
 
 		@hardcoded = {}
 
@@ -14,9 +14,26 @@ class DataSvc
 			'1':
 				name: 'Appalachian Trail'
 			'2':
-				name: 'Continental Divide Trail'
-			'3':
 				name: 'Pacific Crest Trail'
+			'3':
+				name: 'Camino de Santiago (Camino Frances)'
+			'4':
+				name: 'Continental Divide Trail'
+			'5':
+				name: 'Camino de Santiago (Ruta del Norte)'
+			'6':
+				name: 'Camino de Santiago (Via de la Plata)'
+			'7':
+				name: 'Camino de Santiago (Camino Portugues)'
+			'8':
+				name: 'Long Trail'
+			# No number 9
+			'10':
+				name: 'John Muir Trail'
+			'11':
+				name: 'Colorado Trail'
+			'12':
+				name: 'Other (Not Listed)'
 
 		@hardcoded.hikes =
 			'1_2006':
@@ -44,14 +61,33 @@ class DataSvc
 		@$timeout ()=>
 			return @hardcoded.trails
 
+	getHikes: (trailId, year, nameFilter)->
+
+		url = "/getHikes/#{trailId}/#{year}"
+
+		params = 
+			TableName: 'Hikes'
+			HashKeyValue:
+				S: "#{trailId}_#{year}"
+
+		return @_runDynamoQuery('query', params).then (resp)->
+			return Items
+
 	getUserHikes: (fbId)->
-		@$timeout ()=>
+		return null
 
-			userHikes = []
-			$.each hikes, (trailYear)->
+		url = "/dynamoDB/#{method}/#{JSON.stringify(params)}"
+		console.log (["Backend call to #{url}", params])
 
-			return @hardcoded.hikes[fbId]
+		@$http.get(url).then (resp)=>
+			return resp.data
 
-angular.module(name, []).factory(name, ['$log','$timeout', 'common.services.env', ($log, $timeout, env) ->
-	new DataSvc($log, $timeout, env)
-])
+angular.module(name, []).factory(
+	name, [
+		'$log'
+		'$timeout'
+		'$http'
+		($log, $timeout, $http) ->
+			new DataSvc($log, $timeout, $http)
+	]
+)

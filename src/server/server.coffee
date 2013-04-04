@@ -1,59 +1,137 @@
 express = require('express')
 AWS = require('aws-sdk')
+q = require('q')
+LRU = require('lru-cache')
 _ = require('underscore')
 
-awsConfig = 
-	accessKeyId: process.env.AWS_ACCESS_KEY
-	secretAccessKey: process.env.AWS_SECRET_KEY
-	region: 'us-east-1'
+# CONSTANTS
+PORT = 5000
+ADMIN_PORT = 8111
 
-AWS.config.update awsConfig
+# 'GLOBALS'
+ddb = null
+cache = null
 
-console.log awsConfig
+initAws = ()->
 
-port = 5000
-adminPort = 8111
+	awsConfig = 
+		accessKeyId: process.env.AWS_ACCESS_KEY
+		secretAccessKey: process.env.AWS_SECRET_KEY
+		region: 'us-east-1'
 
-ddb = new AWS.DynamoDB.Client()
+	AWS.config.update awsConfig
+	ddb = new AWS.DynamoDB.Client()
 
-getAllHikeData = ()->
-	t=[]
-	t.push {TableName:'Hikes',Item:{FBID: {S: '1630778359'},TrailYear: {S: '1_1972'},TrailName: {S: 'TJ aka Teej'},Notes: {S: 'Gorham to Monson'}}}
-	return t
+initCache = ()->
+
+	options =
+		max: 500
+		dispose: (key, value)->
+			console.log "Cache disposing of #{key}"
+		#maxAge: 1000 * 60 * 60 * 1 # 1 hour
+		maxAge: 1 #effectively disables cache
+
+	cache = LRU(options)
+
+callDynamoDb = (action, params)->
+
+	deffered = q.defer()
+	ddb[action] params, (ddbErr, ddbResp)->
+		#console.log ['Called Dynamo', ddbErr, ddbResp]
+
+		if ddbErr?
+			console.log (['DDB Reject', ddbErr])
+			deffered.reject(ddbError)
+			return
+
+		unless ddbResp?
+			console.log (['DDB Reject', "both null"])
+			deffered.reject("Didn't get an error or a response")
+			return
+
+		console.log (['DDB Accept'])
+		deffered.resolve (ddbResp)
+
+	return deffered.promise
+
+onSuccess = (resp)->
+	return (data)->
+		console.log (['Resp with success'])
+		resp.send(JSON.stringify(data))
+
+onFailure = (resp)->
+	return (data)->
+		console.log (['Resp with fail'])
+		resp.send(500, JSON.stringify(data))
+
+# Strips out all the metadata from the response and just returns the Items
+cleanupDynamoDbItems = (resp)->
+
+	cleanedItems = []
+
+	for item in resp.Items
+
+		cleanedItem = {}
+
+		# iterate over each prop in the item
+		_.each item, (itemObj, prop) ->
+
+			# each item is an object with only one prop
+			value = null
+
+			_.each itemObj, (val) ->
+				# should be only one, so we can take the first
+				value = val
+
+			cleanedItem[prop] = value
+		cleanedItems.push cleanedItem
+
+	resp.Items = cleanedItems
+	return resp
+
+handleCaching = (key, populateCacheFn)->
+
+	value = cache.get(key)
+
+	unless value?
+		value = q.when(populateCacheFn()).then (data)->
+			console.log "Added #{key} to the cache"
+			cache.set(key, data)
+			return data
+	else
+		value = q.when(value)
+		console.log "Returned #{key} from the cache"
+
+	return value
 
 createAppServer = ()->
 	app = express();
 
 	# putItem example URL
 	# http://localhost:5000/dynamoDB/putItem?TableName=Hikes&ItemJSON={%22FBID%22:{%22S%22:%221630778359%22},%22TrailYear%22:{%22S%22:%221_1972%22},%22TrailName%22:{%22S%22:%22TJ%20aka%20Teej%22},%22Notes%22:{%22S%22:%22Gorham%20to%20Monson%22}}
-	app.get '/dynamoDB/:action', (req, resp, next)->
-
-		console.log JSON.stringify(getAllHikeData())
-
-		resp.contentType 'application/json'
+	app.get '/dynamoDB/:action/:params', (req, resp, next)->
 
 		action = req.params.action
-		params = {}
+		params = JSON.parse(req.params.params)
 
-		_.each req.query, (param, index)->
+		callDynamoDb(action, params).then onSuccess(resp), onFailure(resp)
 
-			#If the param ends in JSON, strip it off
-			if index.indexOf('JSON', index.length - 4) != -1
-				parsedVal = JSON.parse(param)
-				index = index.substr(0,index.length - 4)
-				params[index] = parsedVal
-			else
-				params[index] = param
+	app.get '/getHikes/:trail/:year', (req, resp)->
 
-		ddb[action] params, (ddbErr, ddbResp)->
+		primaryKey = "#{req.params.trail}_#{req.params.year}"
+		cacheKey = "getHikes_#{primaryKey}"
 
-			if ddbErr?
-				resp.send(500, JSON.stringify(ddbErr))
+		handleCaching cacheKey, ()->
+			params = 
+				TableName: 'Hikes'
+				HashKeyValue:
+					S: primaryKey 
 
-			unless ddbResp?
-				resp.send(500, "Didn't get an error or a response!")
+			callDynamoDb('query', params).then (data)->
+				data = cleanupDynamoDbItems(data)
+				return data
 
-			resp.send(JSON.stringify(ddbResp))
+		.then onSuccess(resp), onFailure(resp)
 
 	app.use(express.bodyParser())
 
@@ -63,8 +141,8 @@ createAppServer = ()->
 
 	app.use(express.static(__dirname + '/public'))
 
-	app.listen port, ()->
-		console.log "Started Server on #{port}"
+	app.listen PORT, ()->
+		console.log "Started Server on #{PORT}"
 
 createAdminServer = ()->
 	adminApp = express();
@@ -72,8 +150,10 @@ createAdminServer = ()->
 	adminApp.get '/', ()->
 		process.exit()
 
-	adminApp.listen adminPort, ()->
-		console.log "Started admin server on #{adminPort}"
+	adminApp.listen ADMIN_PORT, ()->
+		console.log "Started admin server on #{ADMIN_PORT}"
 
+initAws()
+initCache()
 createAppServer()
 createAdminServer()

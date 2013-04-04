@@ -159,7 +159,7 @@ module.exports = (grunt)->
 
 		bgShell:
 			startServer:
-				cmd: "node #{SVR_TARGET_DIR}/server.js"
+				cmd: "node --debug #{SVR_TARGET_DIR}/server.js"
 				bg: true
 				stdout: true
 

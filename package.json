@@ -17,8 +17,10 @@
         "ejs":"0.8.3",
         "faceplate":"0.5.0",
         "express":"3.0.1",
-        "aws-sdk":"latest",
-        "underscore":"1.4.4"
+        "q":"0.9.2",
+        "lru-cache":"2.3.0",
+        "underscore":"1.4.4",
+        "aws-sdk":"latest"
     },
     "devDependencies": {
         "grunt": "0.4.1",
