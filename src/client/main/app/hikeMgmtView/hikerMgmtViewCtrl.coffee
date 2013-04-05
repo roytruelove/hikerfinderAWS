@@ -10,16 +10,19 @@ angular.module(name, []).controller(name, [
 	'common.services.dataSvc'
 	($log, $scope, $q, $rootScope, envSvc, fb, backend) ->
 
-		initData = $q.all [
-			$rootScope.me
-			backend.getTrails()
-		]
+		$scope.myHikes = $rootScope.me.then (me)->
+			backend.getHikesForUser(me.id).then (hikes)->
 
-		initData.then (data)->
-			[me, hikes] = data
-			###
-			backend.getHikes(me.id).then (hikes)->
-				$scope.hikes = for hike in hikes
-					debugger
-			###
+				hikes = for hike in hikes
+					((h)->
+						backend.getTrail(h.Trail).then (trailTitle)->
+							h.Trail = trailTitle.name
+					)(hike)
+
+					hike
+
+				return hikes
+
+		$scope.myHikes.then (hikes)->
+			console.log hikes
 	])

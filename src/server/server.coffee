@@ -133,6 +133,26 @@ createAppServer = ()->
 
 		.then onSuccess(resp), onFailure(resp)
 
+	app.get '/getHikesForUser/:fbid', (req, resp)->
+
+		fbid = req.params.fbid
+		cacheKey = "getHikesForUser_#{fbid}"
+
+		handleCaching cacheKey, ()->
+			params = 
+				TableName: 'Hikes'
+				ScanFilter:
+					FBID:
+						AttributeValueList:
+							[{S: fbid}]	
+						ComparisonOperator: 'EQ'
+
+			callDynamoDb('scan', params).then (data)->
+				data = cleanupDynamoDbItems(data)
+				return data
+
+		.then onSuccess(resp), onFailure(resp)
+
 	app.use(express.bodyParser())
 
 	app.post '/', (req, resp, next)->

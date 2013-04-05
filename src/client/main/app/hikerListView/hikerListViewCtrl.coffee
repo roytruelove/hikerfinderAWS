@@ -43,6 +43,8 @@ angular.module(name, []).controller(name, [
 
 		refreshHikes = ()->
 
+			$log.log 'Refreshing hikes'
+
 			$scope.nameFilter = ''
 
 			backend.getHikes($scope.selectedTrail, $scope.selectedYear).then (hikes)->
@@ -64,7 +66,7 @@ angular.module(name, []).controller(name, [
 					populateIsFriend = ((facebookId)->
 						hike.isFriend = friends.then (friends)->
 
-							$log.log "Running for fbid #{facebookId}"
+							#$log.log "Running for fbid #{facebookId}"
 
 							matchedFriends = (friend for friend in friends when friend.id == facebookId)
 
@@ -101,13 +103,16 @@ angular.module(name, []).controller(name, [
 				) hike
 
 			$scope.hikes = filteredHikes
-			console.log [filteredHikes]
 
-		$scope.$watch 'selectedYear', ()->
-			refreshHikes()
+		refreshHikes()
 
-		$scope.$watch 'selectedTrail', ()->
-			refreshHikes()
+		$scope.$watch 'selectedYear', (n, o)->
+			unless n == o
+				refreshHikes()
+
+		$scope.$watch 'selectedTrail', (n, o)->
+			unless n == o
+				refreshHikes()
 
 		$scope.$watch 'nameFilter', ()->
 			applyNameFilter $scope.nameFilter

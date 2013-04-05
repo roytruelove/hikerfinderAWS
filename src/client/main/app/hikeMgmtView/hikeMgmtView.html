@@ -42,32 +42,34 @@
 			</div>
 		</fieldset>
 	</form>
+	<div style="max-height: 600px; overflow: auto;">
+		<table>
+			<thead>
+				<tr>
+					<th style="width:10%;">Year</th>
+					<th>Trail</th>
+					<th>Trail Name</th>
+					<th>Notes</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!--
+				<tr>
+					<td colspan='3'><em>(No hikes yet)</em></td>
+				</tr>
+				-->
+				<tr ng-repeat="hike in myHikes">
+					<td><a href="javascript:void(0)">{{hike.Year}}</a></td>
+					<td><a href="javascript:void(0)">{{hike.Trail}}</a></td>
+					<td><a href="javascript:void(0)">{{hike.TrailName}}</a></td>
+					<td><a href="javascript:void(0)">{{hike.Notes}}</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<div class="row">
 		<div class="span2 offset10">
 			<button class="btn primary">Add New Hike</button>
 		</div>
-	</div>
-	<div style="height: 600px; overflow: auto;">
-		<table>
-			<thead>
-				<tr>
-					<th>Trail</th>
-					<th>Trail Name</th>
-					<th>Year(s)</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td colspan='3'><em>(No hikes yet)</em></td>
-				</tr>
-				<!--
-				<tr>
-					<td><a href="javascript:void(0)">Appalachian Trail</a></td>
-					<td>Kilgore Trout</td>
-					<td>2006, 2007</td>
-				</tr>
-			-->
-			</tbody>
-		</table>
 	</div>
 </div>

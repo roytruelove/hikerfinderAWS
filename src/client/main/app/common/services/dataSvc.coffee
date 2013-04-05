@@ -10,6 +10,36 @@ class DataSvc
 
 		@hardcoded = {}
 
+		@hardcoded.myTrails = 
+		[
+			{
+				"Trail":"1",
+				"TrailName":"Kilgore Trout",
+				"AddedDate":"1230629602",
+				"Year":"2007",
+				"TrailYear":"1_2007",
+				"Notes":"July 20somethin' @ Bennington, VT ->Sept 30 @ Katahdin",
+				"FBID":"672579111"
+			},
+			{
+				"TrailYear":"3_2008",
+				"Year":"2008",
+				"Trail":"3",
+				"FBID":"672579111",
+				"Notes":"Started September 21st from St. John Pied-de-Port, made it to Santiago on October 27.",
+				"AddedDate":"1230575454"
+			},
+			{
+				"Trail":"1",
+				"TrailName":"Kilgore Trout",
+				"AddedDate":"1230629530",
+				"Year":"2006",
+				"TrailYear":"1_2006",
+				"Notes":"March 17 @ Springer ->Aug 5 @ Bennington, VT",
+				"FBID":"672579111"
+			}
+		]
+
 		@hardcoded.trails = [
 			{id:'1', name: 'Appalachian Trail'}
 			{id:'11', name: 'Colorado Trail'}
@@ -24,16 +54,31 @@ class DataSvc
 			{id:'12', name: 'Other (Not Listed)'}
 		]
 
+		# maps trail id to it's object for easier looking
+		@hardcoded.trailsMap = (()=>
+			map = {}
+
+			for trail in @hardcoded.trails
+				map[trail.id] = trail
+
+			map
+		)()
+
 	getTrails: ()->
 		@$timeout ()=>
 			return @hardcoded.trails
 
-	getTrail:(id)->
-		throw "Not done"
-		return @hardcoded.trails[id]
-
 	getHikes: (trailId, year, nameFilter)->
 		return @_getItems("/getHikes/#{trailId}/#{year}")
+
+	getHikesForUser: (FBID)->
+		#return @_getItems("/getHikesForUser/#{FBID}")
+		@$timeout ()=>
+			return @hardcoded.myTrails
+
+	getTrail: (trailId)->
+		@$timeout ()=>
+			return @hardcoded.trailsMap[trailId]
 
 	_get: (url)->
 		@$http.get(url).then (resp)=>
