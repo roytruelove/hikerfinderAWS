@@ -38,7 +38,6 @@
 					<th>Photo</th>
 					<th>Full Name</th>
 					<th>Trail Name</th>
-					<th style="width: 100px;">Added</th>
 					<th>Notes</th>
 					<th>Friend?</th>
 				</tr>
@@ -48,7 +47,6 @@
 					<td><a href="http://www.facebook.com/{{hiker.FBID}}" target"_blank"><img ng-src="https://graph.facebook.com/{{hiker.FBID}}/picture"></a></td>
 					<td><a href="http://www.facebook.com/{{hiker.FBID}}" target"_blank">{{hiker.FullName}}</a></td>
 					<td>{{hiker.TrailName}}</td>
-					<td>{{hiker.AddedDate}}</td>
 					<td>{{hiker.Notes}}</td>
 					<td> 
 						<img style="width: 20px" ng-show="hiker.isFriend" src="index/checkmark.png">

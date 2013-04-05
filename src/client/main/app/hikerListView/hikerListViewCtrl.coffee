@@ -71,7 +71,7 @@ angular.module(name, []).controller(name, [
 							return matchedFriends.length > 0
 					)(fbid)
 
-					hike.AddedDate = moment.unix(hike.AddedDate).fromNow()
+					#hike.AddedDate = moment.unix(hike.AddedDate).fromNow()
 
 					hike
 
