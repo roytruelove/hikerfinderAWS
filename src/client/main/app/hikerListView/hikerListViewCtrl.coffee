@@ -43,7 +43,12 @@ angular.module(name, []).controller(name, [
 
 		refreshHikes = ()->
 
+			$scope.nameFilter = ''
+
 			backend.getHikes($scope.selectedTrail, $scope.selectedYear).then (hikes)->
+
+				hikes = hikes.sort (a,b)->
+					return b.AddedDate - a.AddedDate
 
 				hikes = for hike in hikes
 
@@ -51,6 +56,8 @@ angular.module(name, []).controller(name, [
 
 					hike.FullName = fb.run("#{fbid}?fields=name").then (user)->
 						return user.name
+					, (error)->
+						return '(No longer on Facebook)'
 
 					# have to wrap this in a function to avoid funky scope issues with the
 					# facebook ID inside the promise
@@ -63,6 +70,8 @@ angular.module(name, []).controller(name, [
 
 							return matchedFriends.length > 0
 					)(fbid)
+
+					hike.AddedDate = moment.unix(hike.AddedDate).fromNow()
 
 					hike
 

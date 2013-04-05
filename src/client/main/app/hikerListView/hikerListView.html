@@ -26,6 +26,11 @@
 	</div> <!-- row -->
 	</form>
 	<div class="row">
+		<div class="span12">
+			<p>(Most recent additions are at the top)</p>
+		</div>
+	</div> <!-- row -->
+	<div class="row">
 		<div class="span12" style="height: 600px; overflow-y: auto;">
 		<table>
 			<thead>
@@ -33,7 +38,8 @@
 					<th>Photo</th>
 					<th>Full Name</th>
 					<th>Trail Name</th>
-					<th>Added</th>
+					<th style="width: 100px;">Added</th>
+					<th>Notes</th>
 					<th>Friend?</th>
 				</tr>
 			</thead>
@@ -42,7 +48,8 @@
 					<td><a href="http://www.facebook.com/{{hiker.FBID}}" target"_blank"><img ng-src="https://graph.facebook.com/{{hiker.FBID}}/picture"></a></td>
 					<td><a href="http://www.facebook.com/{{hiker.FBID}}" target"_blank">{{hiker.FullName}}</a></td>
 					<td>{{hiker.TrailName}}</td>
-					<td>TODO</td>
+					<td>{{hiker.AddedDate}}</td>
+					<td>{{hiker.Notes}}</td>
 					<td> 
 						<img style="width: 20px" ng-show="hiker.isFriend" src="index/checkmark.png">
 						<img style="width: 20px" ng-hide="hiker.isFriend" src="index/checkmark-red.png">

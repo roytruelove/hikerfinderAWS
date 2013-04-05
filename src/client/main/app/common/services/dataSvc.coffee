@@ -40,7 +40,8 @@ class DataSvc
 			return resp.data
 		, (errorResp)=>
 			# TODO handle this elegantly
-			$log.log (['Could not handle request to server', errorResp])
+			@$log.log (['Could not handle request to server', errorResp])
+			errorResp
 
 	# Helper function when a request returns a list of items.
 	_getItems: (url)->
