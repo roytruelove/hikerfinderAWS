@@ -20,6 +20,7 @@ class FacebookSvc
 	init: ()->
 
 		login = ()=>
+			@$log.log "Waiting for facebook to login..."
 			FB.login (resp)=>
 
 				@$rootScope.$apply ()=>
@@ -39,19 +40,20 @@ class FacebookSvc
 				cookie: true
 				xfbml: true
 
+			@$log.log "Waiting for facebook login status..."
 			FB.getLoginStatus (resp)=>
 				if resp.status == 'connected'
 					@$rootScope.$apply ()=>
 						@initDefer.resolve(resp.authResponse)
-				else if resp.status == 'not_authorized'
-					login()
-				else
+				else 
 					login()
 
 		loadFbAsync = (d)=>
+			@$log.log "loading facebook api..."
 			id = 'facebook-jssdk'
 
 			if (d.getElementById(id)?)
+				@$log.log "facebook api loaded - element already exists"
 				return
 
 			ref = d.getElementsByTagName('script')[0]
@@ -60,7 +62,9 @@ class FacebookSvc
 			js.async = true
 			js.src = "//connect.facebook.net/en_US/all.js"
 			ref.parentNode.insertBefore(js, ref)
+			@$log.log "facebook api loaded"
 
+		@$log.log "Waiting to load facebook api..."
 		loadFbAsync(document)
 
 		return @initialized
@@ -73,7 +77,13 @@ class FacebookSvc
 
 			@api().api "/#{url}", (resp)=>
 				@$rootScope.$apply ()=>
-					d.resolve(resp)
+
+					if resp.error?
+						#TODO handle this elegantly
+						console.log ['Error in facebook API', resp.error]
+						d.reject(resp.error)
+					else
+						d.resolve(resp)
 
 			return d.promise
 

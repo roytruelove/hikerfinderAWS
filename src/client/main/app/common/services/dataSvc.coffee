@@ -10,36 +10,26 @@ class DataSvc
 
 		@hardcoded = {}
 
-		@hardcoded.trails = 
-			'1':
-				name: 'Appalachian Trail'
-			'2':
-				name: 'Pacific Crest Trail'
-			'3':
-				name: 'Camino de Santiago (Camino Frances)'
-			'4':
-				name: 'Continental Divide Trail'
-			'5':
-				name: 'Camino de Santiago (Ruta del Norte)'
-			'6':
-				name: 'Camino de Santiago (Via de la Plata)'
-			'7':
-				name: 'Camino de Santiago (Camino Portugues)'
-			'8':
-				name: 'Long Trail'
-			# No number 9
-			'10':
-				name: 'John Muir Trail'
-			'11':
-				name: 'Colorado Trail'
-			'12':
-				name: 'Other (Not Listed)'
+		@hardcoded.trails = [
+			{id:'1', name: 'Appalachian Trail'}
+			{id:'11', name: 'Colorado Trail'}
+			{id:'3', name: 'Camino de Santiago (Camino Frances)'}
+			{id:'7', name: 'Camino de Santiago (Camino Portugues)'}
+			{id:'5', name: 'Camino de Santiago (Ruta del Norte)'}
+			{id:'6', name: 'Camino de Santiago (Via de la Plata)'}
+			{id:'4', name: 'Continental Divide Trail'}
+			{id:'8', name: 'Long Trail'}
+			{id:'10', name: 'John Muir Trail'}
+			{id:'2', name: 'Pacific Crest Trail'}
+			{id:'12', name: 'Other (Not Listed)'}
+		]
 
 	getTrails: ()->
 		@$timeout ()=>
 			return @hardcoded.trails
 
 	getTrail:(id)->
+		throw "Not done"
 		return @hardcoded.trails[id]
 
 	getHikes: (trailId, year, nameFilter)->

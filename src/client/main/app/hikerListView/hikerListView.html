@@ -1,27 +1,55 @@
-<div style="height: 600px; overflow: auto;" ng-controller='hikerListView.hikerListViewCtrl'>
-	<table>
-		<thead>
-			<tr>
-				<th>Photo</th>
-				<th>Full Name</th>
-				<th>Year</th>
-				<th>Trail Name</th>
-				<th>Added</th>
-				<th>Friend?</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="hiker in hikers">
-				<td><img ng-src="https://graph.facebook.com/{{hiker.FBID}}/picture"></td>
-				<td>TODO</td>
-				<td>{{hiker.Year}}</td>
-				<td>{{hiker.TrailName}}</td>
-				<td>TODO</td>
-				<td ng-init="hiker.friend = false">
-					<img style="width: 20px" ng-show="hiker.friend" src="index/checkmark.png">
-					<img style="width: 20px" ng-hide="hiker.friend" src="index/checkmark-red.png">
-				</td>
-			</tr>
-		</tbody>
-	</table>
+<div ng-controller='hikerListView.hikerListViewCtrl'>
+	<form>
+	<div class="row">
+		<div class="span1">
+			<label style="width: auto;">Trail</label>
+		</div>
+		<div class="span3">
+			<select ng-model='selectedTrail' name="Trail" id="trail" style="width: 175px;">
+				<option ng-selected="trail.id == selectedTrail" ng-repeat="trail in trails" value="{{trail.id}}">{{trail.name}}</option>
+			</select>
+		</div>
+		<div class="span1">
+			<label style="width: auto;">Year</label>
+		</div>
+		<div class="span3">
+			<select name="Year" ng-model='selectedYear' id="year" style="width: 175px;">
+				<option ng-selected="year.id == selectedYear" ng-repeat="year in years" value="{{year.id}}">{{year.year}}</option>
+			</select>
+		</div>
+		<div class="span1">
+			<label style="width: auto;">Name</label>
+		</div>
+		<div class="span3">
+			<input ng-model="nameFilter" id="nameFilter" name="nameFilter" size="5" type="text" style="width: 165px;"/> 
+		</div>
+	</div> <!-- row -->
+	</form>
+	<div class="row">
+		<div class="span12" style="height: 600px; overflow-y: auto;">
+		<table>
+			<thead>
+				<tr>
+					<th>Photo</th>
+					<th>Full Name</th>
+					<th>Trail Name</th>
+					<th>Added</th>
+					<th>Friend?</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="hiker in hikes">
+					<td><a href="http://www.facebook.com/{{hiker.FBID}}" target"_blank"><img ng-src="https://graph.facebook.com/{{hiker.FBID}}/picture"></a></td>
+					<td><a href="http://www.facebook.com/{{hiker.FBID}}" target"_blank">{{hiker.FullName}}</a></td>
+					<td>{{hiker.TrailName}}</td>
+					<td>TODO</td>
+					<td> 
+						<img style="width: 20px" ng-show="hiker.isFriend" src="index/checkmark.png">
+						<img style="width: 20px" ng-hide="hiker.isFriend" src="index/checkmark-red.png">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
 </div>

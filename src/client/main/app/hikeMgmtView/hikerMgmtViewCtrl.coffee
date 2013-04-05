@@ -17,7 +17,9 @@ angular.module(name, []).controller(name, [
 
 		initData.then (data)->
 			[me, hikes] = data
+			###
 			backend.getHikes(me.id).then (hikes)->
 				$scope.hikes = for hike in hikes
 					debugger
+			###
 	])
