@@ -5,16 +5,20 @@
 mods = [
 	
 	'common.directives.tabs'
+	'common.directives.popover'
 
 	'common.services.dataSvc'
 	'common.services.envProvider'
 	'common.services.toastrWrapperSvc'
 	'common.services.facebook'
 
+	'hikerListView.hikerListViewCtrl'
+	
+	'hikeMgmtView.hikeMgmtViewCtrl'
+	'hikeMgmtView.hikeEditorDirective'
+
 	'index.indexCtrl'
 
-	'hikerListView.hikerListViewCtrl'
-	'hikeMgmtView.hikeMgmtViewCtrl'
 ]
 
 ### ###########################################################################

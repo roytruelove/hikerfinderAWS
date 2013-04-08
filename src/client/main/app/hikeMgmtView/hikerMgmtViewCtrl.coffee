@@ -10,6 +10,12 @@ angular.module(name, []).controller(name, [
 	'common.services.dataSvc'
 	($log, $scope, $q, $rootScope, envSvc, fb, backend) ->
 
+		# don't edit anything yet.  Editor directive watches var
+		$scope.hikeToEdit = null
+		$scope.years = backend.yearsList()
+
+		$scope.trails = backend.getTrails()
+
 		$scope.myHikes = $rootScope.me.then (me)->
 			backend.getHikesForUser(me.id).then (hikes)->
 
@@ -23,6 +29,7 @@ angular.module(name, []).controller(name, [
 
 				return hikes
 
-		$scope.myHikes.then (hikes)->
-			console.log hikes
+		$scope.addNewHike = ()->
+			$scope.hikeToEdit = -1 #-1 is a new hike
+
 	])

@@ -31,4 +31,10 @@ angular.module(name, []).controller(name, [
 
 		fb.init().then(fbLoginSuccess, fbLoginFailure)
 
+		$scope.invite = ()->
+			fb.api().ui
+				method: 'apprequests'
+				message: 'Req'
+				requestCallback: (a,b,c,d)->
+					debugger
 	])

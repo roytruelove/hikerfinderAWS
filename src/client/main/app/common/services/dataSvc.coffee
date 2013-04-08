@@ -6,7 +6,7 @@ name = 'common.services.dataSvc'
 
 class DataSvc
 
-	constructor: (@$log, @$timeout, @$http) ->
+	constructor: (@$log, @$q, @$http) ->
 
 		@hardcoded = {}
 
@@ -65,20 +65,29 @@ class DataSvc
 		)()
 
 	getTrails: ()->
-		@$timeout ()=>
-			return @hardcoded.trails
+		@$q.when @hardcoded.trails
 
 	getHikes: (trailId, year, nameFilter)->
 		return @_getItems("/getHikes/#{trailId}/#{year}")
 
 	getHikesForUser: (FBID)->
 		#return @_getItems("/getHikesForUser/#{FBID}")
-		@$timeout ()=>
-			return @hardcoded.myTrails
+		@$q.when @hardcoded.myTrails
 
 	getTrail: (trailId)->
-		@$timeout ()=>
-			return @hardcoded.trailsMap[trailId]
+		@$q.when @hardcoded.trailsMap[trailId]
+
+	yearsList: ()->
+
+		years = []
+
+		currentYear = moment().year() + 2 # +2 for planned hikes
+		startYear = 1960
+
+		for yearVal in [currentYear..startYear]
+			years.push {id:yearVal, year:yearVal}
+
+		return years
 
 	_get: (url)->
 		@$http.get(url).then (resp)=>
@@ -96,9 +105,9 @@ class DataSvc
 angular.module(name, []).factory(
 	name, [
 		'$log'
-		'$timeout'
+		'$q'
 		'$http'
-		($log, $timeout, $http) ->
-			new DataSvc($log, $timeout, $http)
+		($log, $q, $http) ->
+			new DataSvc($log, $q, $http)
 	]
 )

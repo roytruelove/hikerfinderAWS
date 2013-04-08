@@ -15,18 +15,7 @@ angular.module(name, []).controller(name, [
 			return friends.data
 
 		$scope.trails = backend.getTrails()
-		$scope.years = (()->
-
-			years = []
-
-			currentYear = moment().year() + 2 # +2 for planned hikes
-			startYear = 1960
-
-			for yearVal in [currentYear..startYear]
-				years.push {id:yearVal, year:yearVal}
-
-			return years
-		)()
+		$scope.years = backend.yearsList()
 
 		#$scope.selectedYear = "#{moment().year()}"
 		$scope.selectedYear = "2006"

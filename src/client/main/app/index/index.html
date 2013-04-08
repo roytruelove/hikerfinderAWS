@@ -29,14 +29,20 @@
 	<div id="spash" ng-hide="loggedIn">
 		<div class="row">
 			<div class="span12">
-				<img src='index/ajax-loader.gif'>
-				<img width='720px' src='index/Boot-Print-Huge.png'>
+				<!--<img width='720px' src='index/Boot-Print-Huge.png'>-->
 			</div>
 		</div>
 	</div>
 	<div id="main" ng-show="loggedIn">
 
-		<h1>Hikerfinder</h1>
+		<div class="row">
+			<div class="span6">
+				<h1>Hikerfinder</h1>
+			</div>
+			<div class="span6">
+				<a href="#" ng-click="invite()" class="btn large success pull-right">Invite Other Hikers!</a>
+			</div>
+		</div>
 		<p>Welcome dirty hiker!  The Hikerfinder facebook app allows you to find other hikers by trail name.</p>
 
 		<ul class="tabs" id="mainTabs">
