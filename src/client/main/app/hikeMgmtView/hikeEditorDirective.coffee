@@ -10,7 +10,6 @@ angular.module(name,[]).directive('hikeEditor', [
 		link = (scope, element, attrs) ->
 
 			scope.$watch 'hikeToEdit', (newVal)->
-				debugger
 				if newVal?
 					$(element).show(400)
 				else $(element).hide(400)

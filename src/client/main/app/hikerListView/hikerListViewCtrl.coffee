@@ -17,8 +17,8 @@ angular.module(name, []).controller(name, [
 		$scope.trails = backend.getTrails()
 		$scope.years = backend.yearsList()
 
-		#$scope.selectedYear = "#{moment().year()}"
-		$scope.selectedYear = "2006"
+		$scope.selectedYear = "#{moment().year()}"
+		#$scope.selectedYear = "2006"
 		$scope.selectedTrail = "1"
 
 		# Utility function.  Should be moved to a service

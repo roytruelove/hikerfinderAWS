@@ -71,11 +71,25 @@ class DataSvc
 		return @_getItems("/getHikes/#{trailId}/#{year}")
 
 	getHikesForUser: (FBID)->
-		#return @_getItems("/getHikesForUser/#{FBID}")
-		@$q.when @hardcoded.myTrails
+		return @_getItems("/getHikesForUser/#{FBID}")
 
 	getTrail: (trailId)->
 		@$q.when @hardcoded.trailsMap[trailId]
+
+	addHike: (FBID, Year, TrailId, TrailName, Notes)->
+
+		AddedDate = moment().unix()
+		TrailYear = "#{Year}_#{TrailId}"
+
+		queryStr = "Trail=#{window.escape(TrailId)}"
+		queryStr += "&TrailName=#{window.escape(TrailName)}" if TrailName
+		queryStr += "&AddedDate=#{window.escape(AddedDate)}"
+		queryStr += "&Year=#{window.escape(Year)}"
+		queryStr += "&TrailYear=#{window.escape(TrailYear)}"
+		queryStr += "&Notes=#{window.escape(Notes)}" if Notes
+		queryStr += "&FBID=#{window.escape(FBID)}"
+
+		return @_get("/addHike?#{queryStr}")
 
 	yearsList: ()->
 

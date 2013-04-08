@@ -41,7 +41,7 @@ callDynamoDb = (action, params)->
 
 		if ddbErr?
 			console.log (['DDB Reject', ddbErr])
-			deffered.reject(ddbError)
+			deffered.reject(ddbErr)
 			return
 
 		unless ddbResp?
@@ -132,6 +132,41 @@ createAppServer = ()->
 				return data
 
 		.then onSuccess(resp), onFailure(resp)
+
+	app.get '/addHike', (req, resp)->
+
+		typeMap =
+			TrailName: 'S'
+			AddedDate: 'N'
+			Year: 'N'
+			Trail: 'N'
+			TrailYear: 'S'
+			Notes: 'S'
+			FBID: 'S'
+
+		errors = []
+
+		itemObj =
+			TableName: 'Hikes'
+			Item: {}
+
+		_.each typeMap, (type, varName) ->
+
+			if req.query[varName]?
+				itemObj.Item[varName] = {}
+				itemObj.Item[varName][type] = req.query[varName]
+
+		console.log req.query
+		console.log itemObj
+		console.log errors
+
+		if errors.length > 0
+			q.reject(errors).then null, onFailure(resp)
+		else
+			callDynamoDb('putItem', itemObj).then(()->
+				fbid = req.query.FBID
+				cache.del("getHikesForUser_#{fbid}")
+			).then onSuccess(resp), onFailure(resp)
 
 	app.get '/getHikesForUser/:fbid', (req, resp)->
 
