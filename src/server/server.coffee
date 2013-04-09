@@ -35,6 +35,8 @@ initCache = ()->
 
 callDynamoDb = (action, params)->
 
+	console.log ['Calling dynamo with:', action, params]
+
 	deffered = q.defer()
 	ddb[action] params, (ddbErr, ddbResp)->
 		#console.log ['Called Dynamo', ddbErr, ddbResp]

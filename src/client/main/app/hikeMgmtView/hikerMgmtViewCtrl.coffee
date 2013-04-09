@@ -13,10 +13,25 @@ angular.module(name, []).controller(name, [
 		# don't edit anything yet.  Editor directive watches var
 		$scope.hikeToEdit = null
 		$scope.years = backend.yearsList()
-		$scope.selectedYear = "#{moment().year()}"
 
 		$scope.trails = backend.getTrails()
-		$scope.selectedTrail = 1; #AT by default
+
+		resetFormData = ()->
+			if $scope.hikeToEdit == null || $scope.hikeToEdit == -1
+				$scope.selectedYear = "#{moment().year()}"
+				$scope.selectedTrail = 1; #AT by default
+				$scope.trailName = ''
+				$scope.notes = ''
+			else 
+				# find the hike and populate it
+				$scope.myHikes.then (hikes)->
+					editHike = (h for h in hikes when h.TrailYear == $scope.hikeToEdit)
+					editHike = editHike[0]
+					debugger	
+					$scope.selectedYear = editHike.Year
+					$scope.selectedTrail = editHike.TrailId
+					$scope.trailName = editHike.TrailName
+					$scope.notes = editHike.Notes
 
 		populateHikes = ()->
 
@@ -36,6 +51,8 @@ angular.module(name, []).controller(name, [
 					hikes = for hike in hikes
 						((h)->
 							backend.getTrail(h.Trail).then (trailTitle)->
+								$log.log h
+								h.TrailId = parseInt(h.Trail)
 								h.Trail = trailTitle.name
 						)(hike)
 
@@ -44,6 +61,7 @@ angular.module(name, []).controller(name, [
 					hikes = hikes.sort (hikeSorter)
 					return hikes
 
+		resetFormData()
 		populateHikes()
 
 		$scope.saveHike = ()->
@@ -57,9 +75,13 @@ angular.module(name, []).controller(name, [
 					alert ("Did not save new hike.  #{error}")
 
 		$scope.addNewHike = ()->
-			$scope.hikeToEdit = -1
+			$scope.hikeToEdit = -1 #-1 is a new hike
 
 		$scope.editHike = (hikeId)->
 			$scope.hikeToEdit = hikeId
-			debugger
+			resetFormData()
+
+		$scope.cancelSaveHike = ()->
+			$scope.hikeToEdit = null
+			resetFormData()
 	])

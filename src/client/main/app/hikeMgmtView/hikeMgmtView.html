@@ -37,9 +37,12 @@
 			</fieldset>
 		</form>
 		<div class="row">
-			<div class="span4 offset8 pull-right">
-				<button ng-click="saveHike()" class="btn primary">Save</button>
-				<button ng-hide='hikeToEdit==-1' ng-click="deleteHike()" class="btn danger">Delete</button>
+			<div class="pull-right">
+				<div class="pull-right">
+					<button ng-click="saveHike()" class="btn primary">Save</button>
+					<button ng-hide='hikeToEdit==-1' ng-click="deleteHike()" class="btn danger">Delete</button>
+					<button ng-click="cancelSaveHike()" class="btn">Cancel</button>
+				</div>
 			</div>
 		</div> 
 	</div> <!-- /hike editor -->
