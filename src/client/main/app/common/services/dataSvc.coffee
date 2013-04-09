@@ -79,7 +79,7 @@ class DataSvc
 	addHike: (FBID, Year, TrailId, TrailName, Notes)->
 
 		AddedDate = moment().unix()
-		TrailYear = "#{Year}_#{TrailId}"
+		TrailYear = "#{TrailId}_#{Year}"
 
 		queryStr = "Trail=#{window.escape(TrailId)}"
 		queryStr += "&TrailName=#{window.escape(TrailName)}" if TrailName

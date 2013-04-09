@@ -19,6 +19,17 @@ angular.module(name, []).controller(name, [
 		$scope.selectedTrail = 1; #AT by default
 
 		populateHikes = ()->
+
+			hikeSorter = (hike1, hike2)->
+				if (hike1.Tear != hike2.Tear)
+					if hike1.Trail < hike2.Trail
+						return -1
+					return 1
+				else
+					if hike1.Year < hike2.Year
+						return -1
+					return 1
+
 			$scope.myHikes = $rootScope.me.then (me)->
 				backend.getHikesForUser(me.id).then (hikes)->
 
@@ -30,20 +41,25 @@ angular.module(name, []).controller(name, [
 
 						hike
 
+					hikes = hikes.sort (hikeSorter)
 					return hikes
-					
+
 		populateHikes()
 
 		$scope.saveHike = ()->
 			$rootScope.me.then (me)->
 				backend.addHike(me.id,$scope.selectedYear,$scope.selectedTrail,$scope.trailName,$scope.notes).then ()->
 					$scope.hikeToEdit = null	
-					debugger
 					populateHikes()
+					$rootScope.$broadcast("hikeAdded")
 				(error)->
 					$log.log error
 					alert ("Did not save new hike.  #{error}")
 
 		$scope.addNewHike = ()->
 			$scope.hikeToEdit = -1
+
+		$scope.editHike = (hikeId)->
+			$scope.hikeToEdit = hikeId
+			debugger
 	])

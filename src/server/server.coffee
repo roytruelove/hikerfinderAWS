@@ -155,10 +155,11 @@ createAppServer = ()->
 			if req.query[varName]?
 				itemObj.Item[varName] = {}
 				itemObj.Item[varName][type] = req.query[varName]
+				console.log ['Added Item', itemObj.Item[varName]]
 
-		console.log req.query
-		console.log itemObj
-		console.log errors
+		# console.log req.query
+		# console.log itemObj
+		# console.log errors
 
 		if errors.length > 0
 			q.reject(errors).then null, onFailure(resp)
@@ -166,6 +167,8 @@ createAppServer = ()->
 			callDynamoDb('putItem', itemObj).then(()->
 				fbid = req.query.FBID
 				cache.del("getHikesForUser_#{fbid}")
+				key = "getHikes_#{req.query.Trail}_#{req.query.Year}"
+				cache.del key
 			).then onSuccess(resp), onFailure(resp)
 
 	app.get '/getHikesForUser/:fbid', (req, resp)->

@@ -55,7 +55,7 @@ angular.module(name, []).controller(name, [
 					populateIsFriend = ((facebookId)->
 						hike.isFriend = friends.then (friends)->
 
-							#$log.log "Running for fbid #{facebookId}"
+							$log.log "Running for fbid #{facebookId}"
 
 							matchedFriends = (friend for friend in friends when friend.id == facebookId)
 
@@ -68,6 +68,9 @@ angular.module(name, []).controller(name, [
 
 				$scope.allHikes = hikes
 				$scope.hikes = hikes
+
+		$scope.$on "hikeAdded", ()->
+			refreshHikes()
 
 		applyNameFilter = (nameFilter)->
 

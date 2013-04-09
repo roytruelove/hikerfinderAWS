@@ -60,7 +60,7 @@
 				</tr>
 				-->
 				<tr ng-repeat="hike in myHikes">
-					<td><a href="javascript:void(0)">{{hike.Year}}</a></td>
+					<td><a ng-click="editHike(hike.TrailYear)" href="javascript:void(0)">{{hike.Year}}</a></td>
 					<td><a href="javascript:void(0)">{{hike.Trail}}</a></td>
 					<td><a href="javascript:void(0)">{{hike.TrailName}}</a></td>
 					<td><a href="javascript:void(0)">{{hike.Notes}}</a></td>
@@ -70,7 +70,7 @@
 	</div>
 	<div class="row">
 		<div class="span2 offset10">
-			<button ng-click="addNewHike()" class="btn primary">Add New Hike</button>
+			<button ng-disabled="hikeToEdit != null" ng-click="addNewHike()" class="btn primary">Add New Hike</button>
 		</div>
 	</div>
 </div>
